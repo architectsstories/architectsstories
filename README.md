@@ -1,4 +1,4 @@
-# Architects Stories — Home V3 / Reference Images
+# Architects Stories — Home 
 
 The existing homepage layout and alignment are preserved. The placeholder visual blocks are now populated with the image/banner sources from the supplied reference code, including the hero, stories, featured projects, people, learning and community imagery.
 
