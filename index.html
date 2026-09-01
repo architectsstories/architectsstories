@@ -65,6 +65,13 @@
   nav.links a{position:relative;padding-bottom:3px;}
   nav.links a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1.5px;background:var(--red);transition:right .18s;}
   nav.links a:hover::after{right:0;}
+  .menu-dropdown{position:relative;}
+  .menu-trigger{padding:0 0 3px;border:0;background:transparent;color:inherit;font:inherit;font-weight:500;cursor:pointer;}
+  .menu-trigger::after{content:"▾";font-size:11px;margin-left:6px;color:var(--red);}
+  .menu-panel{position:absolute;top:calc(100% + 15px);left:-16px;min-width:240px;padding:8px;background:var(--white);border:1px solid var(--line);box-shadow:0 12px 24px rgba(0,0,0,.08);opacity:0;visibility:hidden;transform:translateY(-5px);transition:.16s;}
+  .menu-dropdown:hover .menu-panel,.menu-dropdown:focus-within .menu-panel{opacity:1;visibility:visible;transform:translateY(0);}
+  .menu-panel a{display:block;padding:9px 10px;font-size:13px;line-height:1.35;}
+  .menu-panel a:hover{background:var(--off);color:var(--red);}
   .nav-right{display:flex;align-items:center;gap:26px;font-size:14px;}
   .nav-search{display:flex;align-items:center;gap:7px;color:var(--black);}
   .nav-cta{font-size:13px;font-weight:600;padding:10px 20px;background:var(--black);color:var(--white);border-radius:2px;transition:background .15s;}
@@ -244,7 +251,10 @@
     <nav class="links">
       <a href="#stories">Stories</a>
       <a href="#projects">Projects</a>
-      <a href="#learn">Learn</a>
+      <div class="menu-dropdown">
+        <button class="menu-trigger" type="button" aria-haspopup="true">Learn</button>
+        <div class="menu-panel"><a href="archviz.html">Architectural visualization programme</a></div>
+      </div>
       <a href="#community">Community</a>
     </nav>
     <div class="nav-right">
@@ -483,12 +493,12 @@
     </div>
 
     <div class="learn-grid">
-      <div class="learn-card">
+      <div class="learn-card archviz-card">
         <div class="ph ph-forest"></div>
-        <span class="cat">Masterclass / 01</span>
-        <h4>Designing for Tropical Climates</h4>
-        <p class="by">Ar. Nikhil Sreekumar</p>
-        <div class="price">₹499 →</div>
+        <span class="cat">ARCHVIZ · PROGRAMME</span>
+        <h4>From Model to Visual Story</h4>
+        <p class="by">Architectural visualization programme</p>
+        <a class="price" href="archviz.html">Explore ARCHVIZ →</a>
       </div>
       <div class="learn-card">
         <div class="ph ph-drawing">
@@ -609,6 +619,15 @@
     </div>
   </div>
 </footer>
+
+<script>
+  /* CMS values are applied only when this page is served through server.js. */
+  fetch('/api/content').then(function(response){ return response.ok ? response.json() : null; }).then(function(content){
+    if (!content) return;
+    Object.entries(content.text || {}).forEach(function(entry){ document.querySelectorAll(entry[0]).forEach(function(element){ element.textContent = entry[1]; }); });
+    Object.entries(content.images || {}).forEach(function(entry){ var image=entry[1]; if(!image.url) return; document.querySelectorAll(entry[0]).forEach(function(element){ if(image.type === 'image') element.src=image.url; else element.style.backgroundImage='url("'+image.url.replace(/"/g,'\\"')+'")'; }); });
+  }).catch(function(){ /* Static preview remains usable without the CMS server. */ });
+</script>
 
 </body>
 </html>
