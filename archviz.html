@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHVIZ — Architectural Visualization Programme · Architects Stories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0a0a0a;
+    --white:#ffffff;
+    --off:#f7f6f4;
+    --grey-bg:#eceae5;
+    --grey:#6e6e6c;
+    --grey-light:#9a9a97;
+    --line:#e4e3e0;
+    --red:#e8392c;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--white);color:var(--black);font-family:'Figtree',sans-serif;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:-0.01em;margin:0;}
+  p{margin:0;}
+  a{color:inherit;text-decoration:none;}
+  ul{margin:0;padding:0;list-style:none;}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 32px;}
+  @media(max-width:640px){.wrap{padding:0 20px;}}
+  .red{color:var(--red);}
+
+  /* ---------- sample photography ---------- */
+  .ph{position:relative;overflow:hidden;background-size:cover;background-position:center;}
+  .ph-hero{background-image:linear-gradient(100deg,rgba(0,0,0,.88) 0%,rgba(0,0,0,.55) 40%,rgba(0,0,0,.15) 68%),url("assets/archviz-hero.png");}
+  .ph-mentor{background-image:url("https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=700&q=85");}
+  .ph-compare1{background-image:url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85");filter:saturate(.55) brightness(.92);}
+  .ph-compare2{background-image:url("https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=900&q=85");}
+  .ph-lvl1{background-image:url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=700&q=85");}
+  .ph-lvl2{background-image:url("https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=700&q=85");}
+  .ph-lvl3{background-image:url("https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=700&q=85");}
+  .ph-cta{background-image:linear-gradient(100deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.35) 100%),url("https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=2200&q=85");}
+
+  /* ---------- header ---------- */
+  header{position:sticky;top:0;z-index:60;background:var(--white);border-bottom:1px solid var(--line);}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;max-width:1200px;margin:0 auto;gap:24px;}
+  .logo-img{height:38px;width:auto;display:block;}
+  nav.links{display:flex;gap:34px;font-size:14px;font-weight:500;color:var(--black);}
+  nav.links a{position:relative;padding-bottom:3px;}
+  nav.links a.active{color:var(--red);}
+  nav.links a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1.5px;background:var(--red);transition:right .18s;}
+  nav.links a:hover::after{right:0;}
+  .menu-dropdown{position:relative;}
+  .menu-trigger{border:0;background:transparent;color:inherit;font:inherit;font-weight:500;cursor:pointer;padding:0 0 3px;}
+  .menu-trigger::after{content:"▾";font-size:11px;margin-left:6px;color:var(--red);}
+  .menu-panel{position:absolute;top:calc(100% + 15px);left:-16px;min-width:150px;padding:8px;background:var(--white);border:1px solid var(--line);box-shadow:0 12px 24px rgba(0,0,0,.08);opacity:0;visibility:hidden;transform:translateY(-5px);transition:.16s;}
+  .menu-dropdown:hover .menu-panel,.menu-dropdown:focus-within .menu-panel{opacity:1;visibility:visible;transform:translateY(0);}
+  .menu-panel a{display:block;padding:9px 10px;font-size:13px;}
+  .menu-panel a:hover{background:var(--off);color:var(--red);}
+  .nav-right{display:flex;align-items:center;gap:26px;font-size:14px;}
+  .nav-search{display:flex;align-items:center;gap:7px;color:var(--black);}
+  .nav-cta{font-size:13px;font-weight:600;padding:10px 20px;background:var(--black);color:var(--white);border-radius:2px;transition:background .15s;}
+  .nav-cta:hover{background:var(--red);}
+  @media(max-width:900px){nav.links,.nav-search,.nav-right a:not(.nav-cta){display:none;}}
+
+  /* ---------- crumb ---------- */
+  .crumb{padding:22px 0;font-size:12.5px;color:var(--grey);}
+  .crumb a:hover{color:var(--red);}
+  .crumb span{margin:0 6px;color:var(--grey-light);}
+
+  section{padding:80px 0;}
+  @media(max-width:640px){section{padding:52px 0;}}
+  .eyebrow-dot{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .eyebrow-dot .dot{width:7px;height:7px;background:var(--red);border-radius:50%;flex:none;}
+  .eyebrow-dot span.label{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--grey);}
+  .sec-h{font-size:clamp(24px,2.8vw,34px);text-transform:uppercase;line-height:1.1;}
+  .sec-lede{font-size:14.5px;color:var(--grey);margin-top:14px;max-width:60ch;line-height:1.65;}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;width:100vw;height:480px;margin:8px calc(50% - 50vw) 0;color:var(--white);display:flex;align-items:flex-end;border-radius:0;overflow:hidden;}
+  @media(max-width:760px){.hero{height:420px;}}
+  .hero-inner{position:relative;z-index:2;width:100%;max-width:1160px;margin:0 auto;padding:0 32px 46px;}
+  @media(max-width:640px){.hero-inner{padding-left:20px;padding-right:20px;}}
+  .hero-eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;display:flex;align-items:center;gap:9px;margin-bottom:20px;}
+  .hero-eyebrow .dot{width:6px;height:6px;background:var(--red);border-radius:50%;}
+  h1.hero-h{font-size:clamp(30px,4.6vw,46px);line-height:1.1;max-width:16ch;text-transform:uppercase;}
+  .hero-sub{margin-top:18px;font-size:15.5px;line-height:1.6;color:#e6e4de;max-width:52ch;}
+  .hero-tagline{margin-top:14px;font-size:13px;font-weight:600;letter-spacing:.04em;color:#cfcdc7;text-transform:uppercase;}
+  .hero-cta{display:inline-flex;align-items:center;gap:8px;margin-top:26px;font-size:14.5px;font-weight:600;color:var(--black);background:var(--white);padding:15px 26px;border-radius:2px;}
+  .hero-cta:hover{background:var(--red);color:var(--white);}
+
+  /* ---------- problem ---------- */
+  #problem{background:var(--off);}
+  .problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;}
+  @media(max-width:860px){.problem-grid{grid-template-columns:1fr;}}
+  .problem-quote{font-family:'Space Grotesk',sans-serif;font-size:clamp(20px,2.6vw,28px);line-height:1.35;}
+  .problem-quote .strike{color:var(--grey-light);text-decoration:line-through;text-decoration-color:var(--red);}
+  .problem-body p{font-size:14.5px;color:var(--grey);line-height:1.7;}
+  .problem-body p+p{margin-top:14px;}
+
+  .compare-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:48px;}
+  @media(max-width:640px){.compare-row{grid-template-columns:1fr;}}
+  .compare-card .ph{aspect-ratio:16/11;border-radius:2px;}
+  .compare-label{font-size:13px;font-weight:600;margin-top:12px;}
+  .compare-label span{font-weight:400;color:var(--grey);}
+
+  /* ---------- what you'll learn ---------- */
+  .learn-grid9{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:40px;}
+  @media(max-width:860px){.learn-grid9{grid-template-columns:1fr 1fr;}}
+  @media(max-width:560px){.learn-grid9{grid-template-columns:1fr;}}
+  .learn-tile{background:var(--white);padding:30px 26px;}
+  .learn-tile .num{font-family:'Space Grotesk',sans-serif;font-size:12px;color:var(--grey-light);}
+  .learn-tile h4{font-size:16px;margin-top:14px;}
+  .learn-tile p{font-size:13px;color:var(--grey);margin-top:8px;line-height:1.55;}
+
+  /* ---------- three level path ---------- */
+  #path{background:var(--black);color:var(--white);}
+  #path .eyebrow-dot span.label{color:#b8b7b3;}
+  #path .sec-lede{color:#b8b7b3;}
+  .level-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:44px;}
+  @media(max-width:860px){.level-grid{grid-template-columns:1fr;}}
+  .level-card{border:1px solid rgba(255,255,255,.16);padding:0 0 28px;border-radius:2px;overflow:hidden;}
+  .level-card .ph{aspect-ratio:16/10;}
+  .level-card .lvl{font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--red);text-transform:uppercase;padding:22px 28px 0;}
+  .level-card h3{font-size:22px;text-transform:uppercase;margin-top:12px;padding:0 28px;}
+  .level-card p{font-size:13.5px;color:#c9c7c0;margin-top:12px;line-height:1.6;padding:0 28px;}
+  .level-card .tag{display:inline-block;margin-top:20px;font-size:12px;color:#8f8e8a;letter-spacing:.03em;padding:0 28px;}
+
+  /* ---------- curriculum accordion ---------- */
+  .curr-level-head{display:flex;align-items:baseline;gap:14px;margin:44px 0 18px;}
+  .curr-level-head:first-child{margin-top:8px;}
+  .curr-level-head .tag{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--red);}
+  .curr-level-head h3{font-size:19px;text-transform:uppercase;}
+  details.acc{border-bottom:1px solid var(--line);}
+  details.acc summary{list-style:none;cursor:pointer;padding:20px 4px;display:flex;justify-content:space-between;align-items:center;gap:20px;font-size:15px;font-weight:600;}
+  details.acc summary::-webkit-details-marker{display:none;}
+  details.acc summary .plus{font-size:18px;color:var(--red);flex:none;transition:transform .15s;}
+  details.acc[open] summary .plus{transform:rotate(45deg);}
+  details.acc .acc-body{padding:0 4px 22px;font-size:13.5px;color:var(--grey);line-height:1.65;max-width:66ch;}
+  details.acc .acc-body ul{margin-top:8px;}
+  details.acc .acc-body li{position:relative;padding-left:16px;margin-top:6px;}
+  details.acc .acc-body li::before{content:"–";position:absolute;left:0;color:var(--grey-light);}
+
+  /* ---------- mid cta ---------- */
+  #mid-cta{position:relative;color:var(--white);text-align:center;overflow:hidden;border-radius:0;margin:0;}
+
+  /* ---------- who is this for (simple) ---------- */
+  .audience-simple{margin-top:28px;font-family:'Space Grotesk',sans-serif;font-size:clamp(16px,2vw,20px);font-weight:600;line-height:1.9;color:var(--black);max-width:70ch;}
+
+  /* ---------- software ---------- */
+  #software{background:var(--off);}
+  .soft-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:40px;}
+  @media(max-width:760px){.soft-grid{grid-template-columns:1fr 1fr;}}
+  .soft-item{background:var(--white);border:1px solid var(--line);border-radius:2px;padding:28px 20px;text-align:center;}
+  .soft-item .badge{width:52px;height:52px;border-radius:50%;background:var(--black);color:var(--white);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;}
+  .soft-item h4{font-size:14px;}
+  .soft-item p{font-size:12px;color:var(--grey);margin-top:6px;}
+
+  /* ---------- learning format ---------- */
+  .format-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;margin-top:40px;}
+  @media(max-width:900px){.format-grid{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:560px){.format-grid{grid-template-columns:1fr 1fr;}}
+  .format-item .n{font-family:'Space Grotesk',sans-serif;font-size:24px;color:var(--grey-light);}
+  .format-item h4{font-size:14px;margin-top:12px;}
+  .format-item p{font-size:12.5px;color:var(--grey);margin-top:6px;line-height:1.5;}
+
+  /* ---------- mentor ---------- */
+  #mentor{background:var(--off);}
+  .mentor-grid{display:grid;grid-template-columns:0.7fr 1.3fr;gap:48px;align-items:center;margin-top:40px;}
+  @media(max-width:860px){.mentor-grid{grid-template-columns:1fr;}}
+  .mentor-grid .ph{aspect-ratio:4/5;border-radius:2px;}
+  .mentor-name{font-size:24px;text-transform:uppercase;}
+  .mentor-role{font-size:14px;color:var(--grey);margin-top:8px;}
+  .mentor-bio{font-size:14px;color:var(--grey);margin-top:18px;line-height:1.7;max-width:60ch;}
+  .mentor-stats{display:flex;gap:36px;margin-top:24px;flex-wrap:wrap;}
+  .mentor-stat .n{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;}
+  .mentor-stat .l{font-size:12px;color:var(--grey);margin-top:3px;}
+  .mentor-link{display:inline-flex;gap:7px;font-size:13.5px;font-weight:600;margin-top:22px;}
+  .mentor-link:hover{color:var(--red);}
+
+  /* ---------- what you leave with ---------- */
+  .leave-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;margin-top:40px;}
+  @media(max-width:900px){.leave-grid{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:560px){.leave-grid{grid-template-columns:1fr 1fr;}}
+  .leave-item{text-align:center;padding:24px 14px;border:1px solid var(--line);border-radius:2px;}
+  .leave-item .mk{font-size:20px;color:var(--red);}
+  .leave-item p{font-size:13px;font-weight:600;margin-top:12px;line-height:1.4;}
+
+  /* ---------- faq ---------- */
+  #faq{background:var(--off);}
+  details.faq{border-bottom:1px solid var(--line);}
+  details.faq summary{list-style:none;cursor:pointer;padding:22px 4px;display:flex;justify-content:space-between;gap:20px;font-size:15px;font-weight:600;}
+  details.faq summary::-webkit-details-marker{display:none;}
+  details.faq summary .plus{font-size:18px;color:var(--red);flex:none;transition:transform .15s;}
+  details.faq[open] summary .plus{transform:rotate(45deg);}
+  details.faq .faq-body{padding:0 4px 24px;font-size:13.5px;color:var(--grey);line-height:1.65;max-width:66ch;}
+
+  /* ---------- final CTA ---------- */
+  #final-cta{position:relative;color:var(--white);text-align:center;overflow:hidden;border-radius:0;margin:0;}
+  .cta-inner{position:relative;z-index:2;padding:100px 20px;max-width:640px;margin:0 auto;}
+  .cta-inner h2{font-size:clamp(26px,4vw,40px);text-transform:uppercase;line-height:1.1;}
+  .cta-inner p{font-size:14.5px;color:#d8d6d1;margin-top:16px;}
+  .cta-btn{display:inline-flex;align-items:center;gap:8px;margin-top:30px;font-size:14.5px;font-weight:600;color:var(--black);background:var(--white);padding:16px 30px;border-radius:2px;}
+  .cta-btn:hover{background:var(--red);color:var(--white);}
+  .modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.62);}
+  .modal.is-open{display:flex;}
+  .modal-card{position:relative;width:min(100%,560px);max-height:calc(100vh - 40px);overflow:auto;background:var(--white);padding:36px;box-shadow:0 24px 70px rgba(0,0,0,.3);}
+  .modal-close{position:absolute;top:14px;right:16px;border:0;background:transparent;color:var(--black);font-size:27px;line-height:1;cursor:pointer;}
+  .modal-card h2{font-size:26px;text-transform:uppercase;padding-right:32px;}
+  .modal-card > p{font-size:13.5px;color:var(--grey);line-height:1.55;margin-top:10px;}
+  .apply-form{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:25px;}
+  .apply-form label{display:grid;gap:7px;font-size:12px;font-weight:600;}
+  .apply-form label.full{grid-column:1/-1;}
+  .apply-form input,.apply-form select,.apply-form textarea{width:100%;border:1px solid var(--line);border-radius:0;padding:12px;font:inherit;font-size:14px;color:var(--black);background:var(--white);}
+  .apply-form textarea{min-height:88px;resize:vertical;}
+  .apply-form button{grid-column:1/-1;border:0;cursor:pointer;text-align:center;}
+  .form-success{display:none;margin-top:20px;padding:13px;background:#edf6ef;color:#1b622c;font-size:13.5px;line-height:1.5;}
+  .form-success.show{display:block;}
+  @media(max-width:500px){.modal-card{padding:28px 20px;}.apply-form{grid-template-columns:1fr;}.apply-form label.full,.apply-form button{grid-column:auto;}}
+
+  footer{padding:30px 0;border-top:1px solid var(--line);margin-top:80px;}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+  .foot-logo-img{height:32px;width:auto;display:block;}
+  .foot-copy{font-size:12px;color:var(--grey-light);}
+  .foot-links{display:flex;gap:22px;font-size:12.5px;color:var(--grey);}
+  .foot-links a:hover{color:var(--red);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a href="index.html" class="logo"><img class="logo-img" src="as-logo.png" alt="Architects Stories"></a>
+    <nav class="links">
+      <a href="index.html#stories">Stories</a>
+      <a href="index.html#projects">Projects</a>
+      <div class="menu-dropdown">
+        <button class="menu-trigger" type="button" aria-haspopup="true">Learn</button>
+        <div class="menu-panel"><a href="archviz.html#learn-topics">Architectural visualization programme</a></div>
+      </div>
+      <a href="index.html#community">Community</a>
+    </nav>
+    <div class="nav-right">
+      <span class="nav-search">⌕ Search</span>
+      <a href="index.html#find">Submit</a>
+      <a class="nav-cta" href="#apply-form" data-open-application>Join AS</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="crumb">
+    <a href="index.html">Home</a><span>/</span>
+    <a href="index.html#learn">Learn</a><span>/</span>
+    <span style="color:var(--black);">ARCHVIZ</span>
+  </div>
+
+  <!-- 1. HERO -->
+  <section class="hero ph ph-hero" style="padding:0;">
+    <div class="hero-inner">
+      <div class="hero-eyebrow"><span class="dot"></span>ARCHVIZ · ARCHITECTURAL VISUALIZATION PROGRAMME</div>
+      <h1 class="hero-h">From Model to Visual Story<span class="red">.</span></h1>
+      <p class="hero-sub">A practical architectural visualization programme for students, architects and designers who want to move beyond basic rendering and learn how professional visual stories are created.</p>
+      <p class="hero-tagline">Learn. Create. Visualize.</p>
+      <a class="hero-cta" href="#apply-form" data-open-application>Apply for the Next Batch →</a>
+    </div>
+  </section>
+</div>
+
+<!-- 2. THE PROBLEM -->
+<section id="problem">
+  <div class="wrap">
+    <div class="problem-grid">
+      <div class="problem-quote"><span class="strike">Knowing software</span> ≠ knowing visualization<span class="red">.</span></div>
+      <div class="problem-body">
+        <p>Most architecture students learn the buttons — how to model, apply a material, hit render. But a convincing image isn't a checklist of tools. It's composition, light, restraint and story.</p>
+        <p>ARCHVIZ exists for the gap between "I know the software" and "I can make someone feel a space before it's built." We teach the thinking behind the render, not just the render itself.</p>
+      </div>
+    </div>
+
+    <div class="compare-row">
+      <div class="compare-card">
+        <div class="ph ph-compare1"></div>
+        <p class="compare-label">Default Render <span>— software output</span></p>
+      </div>
+      <div class="compare-card">
+        <div class="ph ph-compare2"></div>
+        <p class="compare-label">Visual Story <span>— what ARCHVIZ teaches</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. WHAT YOU'LL LEARN -->
+<section id="learn-topics">
+  <div class="wrap">
+    <div class="eyebrow-dot"><span class="dot"></span><span class="label">Curriculum Overview</span></div>
+    <h2 class="sec-h">What You'll Learn</h2>
+    <p class="sec-lede">Nine building blocks that take a project from raw 3D model to a finished visual story worth publishing.</p>
+
+    <div class="learn-grid9">
+      <div class="learn-tile"><div class="num">01</div><h4>Visualization Fundamentals</h4><p>How rendering engines see light, geometry and materials — and why that matters for every decision after.</p></div>
+      <div class="learn-tile"><div class="num">02</div><h4>Materials</h4><p>Building believable surfaces — roughness, reflectivity, texture scale and real-world reference.</p></div>
+      <div class="learn-tile"><div class="num">03</div><h4>Lighting</h4><p>Natural and artificial light setups that shape mood, depth and time of day.</p></div>
+      <div class="learn-tile"><div class="num">04</div><h4>Camera & Composition</h4><p>Framing, focal length and the rules (and exceptions) behind a shot that holds attention.</p></div>
+      <div class="learn-tile"><div class="num">05</div><h4>Environment</h4><p>Context, landscaping, entourage and atmosphere that ground a building in its site.</p></div>
+      <div class="learn-tile"><div class="num">06</div><h4>Post-Production</h4><p>Color grading, compositing and retouching to take a render from good to publish-ready.</p></div>
+      <div class="learn-tile"><div class="num">07</div><h4>Animation</h4><p>Camera paths, pacing and sequencing for architectural walkthroughs and flythroughs.</p></div>
+      <div class="learn-tile"><div class="num">08</div><h4>AI Workflows</h4><p>Where AI tools genuinely speed up visualization work — and where they still can't replace judgment.</p></div>
+      <div class="learn-tile"><div class="num">09</div><h4>Visual Storytelling</h4><p>Sequencing images and boards so a project reads as a narrative, not a folder of renders.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. THREE-LEVEL LEARNING PATH -->
+<section id="path">
+  <div class="wrap">
+    <div class="eyebrow-dot"><span class="dot"></span><span class="label">Programme Structure</span></div>
+    <h2 class="sec-h">Three-Level Learning Path</h2>
+    <p class="sec-lede">Progress at your own depth — start from the fundamentals or place directly into the level that matches your experience.</p>
+
+    <div class="level-grid">
+      <div class="level-card">
+        <div class="ph ph-lvl1"></div>
+        <div class="lvl">Level 01</div>
+        <h3>Foundation</h3>
+        <p>Software fluency, basic materials and lighting, and your first fully composed still render.</p>
+        <span class="tag">4 modules · 3 weeks</span>
+      </div>
+      <div class="level-card">
+        <div class="ph ph-lvl2"></div>
+        <div class="lvl">Level 02</div>
+        <h3>Professional</h3>
+        <p>Interior and exterior visualization, environment building, and studio-grade post-production.</p>
+        <span class="tag">5 modules · 4 weeks</span>
+      </div>
+      <div class="level-card">
+        <div class="ph ph-lvl3"></div>
+        <div class="lvl">Level 03</div>
+        <h3>Advanced</h3>
+        <p>Animation, AI-enhanced workflows, visual storytelling and a mentor-reviewed final project.</p>
+        <span class="tag">4 modules · 3 weeks</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. DETAILED CURRICULUM -->
+<section id="curriculum">
+  <div class="wrap">
+    <div class="eyebrow-dot"><span class="dot"></span><span class="label">Module by Module</span></div>
+    <h2 class="sec-h">Detailed Curriculum</h2>
+    <p class="sec-lede">Expand each level to see exactly what's covered, week by week.</p>
+
+    <div class="curr-level-head"><span class="tag">Level 01</span><h3>Foundation</h3></div>
+    <details class="acc" open>
+      <summary>Introduction to the Visualization Pipeline <span class="plus">＋</span></summary>
+      <div class="acc-body">Understanding how models move from SketchUp or Revit into a render engine, scene setup basics, and the render pipeline end to end.
+        <ul><li>Importing and cleaning geometry</li><li>Scene organization and units</li><li>Your first test render</li></ul>
+      </div>
+    </details>
+    <details class="acc">
+      <summary>Basic Materials & Lighting <span class="plus">＋</span></summary>
+      <div class="acc-body">Core material properties and simple lighting setups that already make a scene feel real.
+        <ul><li>PBR material basics</li><li>Sun and sky systems</li><li>Interior artificial lighting</li></ul>
+      </div>
+    </details>
+    <details class="acc">
+      <summary>Camera & Composition Basics <span class="plus">＋</span></summary>
+      <div class="acc-body">Framing a shot with intent — eye level, focal length and the rule of thirds applied to buildings.
+        <ul><li>Choosing a hero angle</li><li>Depth of field basics</li><li>Common framing mistakes</li></ul>
+      </div>
+    </details>
+    <details class="acc">
+      <summary>First Composed Still Render <span class="plus">＋</span></summary>
+      <div class="acc-body">Bringing fundamentals together into one fully composed exterior still, reviewed live with the cohort.</div>
+    </details>
+
+    <div class="curr-level-head"><span class="tag">Level 02</span><h3>Professional</h3></div>
+    <details class="acc">
+      <summary>Advanced Materials & Texturing <span class="plus">＋</span></summary>
+      <div class="acc-body">Layered and procedural materials, texture scaling, and matching materials to real product references.</div>
+    </details>
+    <details class="acc">
+      <summary>Environment & Atmosphere <span class="plus">＋</span></summary>
+      <div class="acc-body">Landscaping, entourage, fog, and time-of-day lighting to place a building convincingly in its context.</div>
+    </details>
+    <details class="acc">
+      <summary>Interior Visualization <span class="plus">＋</span></summary>
+      <div class="acc-body">Lighting and staging interior spaces — balancing natural light, artificial fixtures and furnishing for mood.</div>
+    </details>
+    <details class="acc">
+      <summary>Exterior Visualization <span class="plus">＋</span></summary>
+      <div class="acc-body">Full building exteriors at hero-shot quality, including site context and multiple time-of-day variations.</div>
+    </details>
+    <details class="acc">
+      <summary>Studio-Grade Post-Production <span class="plus">＋</span></summary>
+      <div class="acc-body">Color grading, compositing render passes, and retouching in Photoshop to finish a render for publication.</div>
+    </details>
+
+    <div class="curr-level-head"><span class="tag">Level 03</span><h3>Advanced</h3></div>
+    <details class="acc">
+      <summary>Animation & Walkthroughs <span class="plus">＋</span></summary>
+      <div class="acc-body">Planning and producing a camera walkthrough — pacing, transitions and rendering for video output.</div>
+    </details>
+    <details class="acc">
+      <summary>AI-Enhanced Workflows <span class="plus">＋</span></summary>
+      <div class="acc-body">Practical use of AI tools for upscaling, style exploration and speeding up iteration without losing control.</div>
+    </details>
+    <details class="acc">
+      <summary>Visual Storytelling & Presentation Boards <span class="plus">＋</span></summary>
+      <div class="acc-body">Sequencing stills, sections and details into a presentation board that reads as a narrative.</div>
+    </details>
+    <details class="acc">
+      <summary>Final Project & Mentor Critique <span class="plus">＋</span></summary>
+      <div class="acc-body">A complete visualization package for one project, developed over two weeks with structured mentor feedback.</div>
+    </details>
+  </div>
+</section>
+
+<!-- MID-PAGE CTA -->
+<section id="mid-cta" class="ph ph-cta">
+  <div class="cta-inner">
+    <h2>Ready to start learning?<span class="red">.</span></h2>
+    <p>Seats for the next ARCHVIZ batch are limited to keep mentor feedback meaningful.</p>
+    <a class="cta-btn" href="#apply-form" data-open-application>Apply for the Next Batch →</a>
+  </div>
+</section>
+
+<!-- 7. WHO IS THIS FOR -->
+<section id="audience">
+  <div class="wrap">
+    <div class="eyebrow-dot"><span class="dot"></span><span class="label">Is This You?</span></div>
+    <h2 class="sec-h">Who Is This For?</h2>
+
+    <p class="audience-simple">Architecture Students &nbsp;·&nbsp; Young Architects &nbsp;·&nbsp; Designers &nbsp;·&nbsp; 3D Artists &nbsp;·&nbsp; Visualizers</p>
+  </div>
+</section>
+
+<!-- 8. SOFTWARE -->
+<section id="software">
+  <div class="wrap">
+    <div class="eyebrow-dot"><span class="dot"></span><span class="label">Tools You'll Use</span></div>
+    <h2 class="sec-h">Software</h2>
+    <p class="sec-lede">Industry-standard tools you'll be working in from week one — no separate software course required.</p>
+
+    <div class="soft-grid">
+      <div class="soft-item"><div class="badge">D5</div><h4>D5 Render</h4><p>Real-time rendering engine</p></div>
+      <div class="soft-item"><div class="badge">SU</div><h4>SketchUp / Revit</h4><p>Modeling & documentation</p></div>
+      <div class="soft-item"><div class="badge">Ps</div><h4>Photoshop</h4><p>Post-production & compositing</p></div>
+      <div class="soft-item"><div class="badge">AI</div><h4>AI Tools</h4><p>Upscaling & iteration</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. LEARNING FORMAT -->
+<section id="format">
+  <div class="wrap">
+    <div class="eyebrow-dot"><span class="dot"></span><span class="label">How It Runs</span></div>
+    <h2 class="sec-h">Learning Format</h2>
+
+    <div class="format-grid">
+      <div class="format-item"><div class="n">01</div><h4>Live Sessions</h4><p>Weekly live classes, not pre-recorded playback.</p></div>
+      <div class="format-item"><div class="n">02</div><h4>Practical Assignments</h4><p>Hands-on work after every session, not just theory.</p></div>
+      <div class="format-item"><div class="n">03</div><h4>Mentor Reviews</h4><p>Direct feedback on your work from a working professional.</p></div>
+      <div class="format-item"><div class="n">04</div><h4>Project-Based Learning</h4><p>Everything builds toward one real, portfolio-ready project.</p></div>
+      <div class="format-item"><div class="n">05</div><h4>Community Access</h4><p>Join the AS community for ongoing critique and opportunities.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10. MENTOR -->
+<section id="mentor">
+  <div class="wrap">
+    <div class="eyebrow-dot"><span class="dot"></span><span class="label">Led By</span></div>
+    <h2 class="sec-h">Mentor</h2>
+
+    <div class="mentor-grid">
+      <div class="ph ph-mentor"></div>
+      <div>
+        <h3 class="mentor-name">Ar. Vivek S Nair</h3>
+        <p class="mentor-role">Visualization Lead & Founder, Studio Render Co. — Kozhikode</p>
+        <p class="mentor-bio">Vivek has spent over eight years producing architectural visuals for studios across India, working across residential, hospitality and institutional projects. He has led visualization for award-shortlisted competition entries and built a practice around teaching visualization as a craft — not just a software skill.</p>
+        <div class="mentor-stats">
+          <div class="mentor-stat"><div class="n">8+</div><div class="l">Years in Practice</div></div>
+          <div class="mentor-stat"><div class="n">150+</div><div class="l">Projects Visualized</div></div>
+          <div class="mentor-stat"><div class="n">6</div><div class="l">Cohorts Mentored</div></div>
+        </div>
+        <a class="mentor-link" href="#">View Portfolio →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11. WHAT YOU LEAVE WITH -->
+<section id="outcomes">
+  <div class="wrap">
+    <div class="eyebrow-dot"><span class="dot"></span><span class="label">Outcomes</span></div>
+    <h2 class="sec-h">What You Leave With</h2>
+
+    <div class="leave-grid">
+      <div class="leave-item"><div class="mk">＋</div><p>Portfolio Project</p></div>
+      <div class="leave-item"><div class="mk">＋</div><p>Visualization Skills</p></div>
+      <div class="leave-item"><div class="mk">＋</div><p>Animation</p></div>
+      <div class="leave-item"><div class="mk">＋</div><p>Workflow Knowledge</p></div>
+      <div class="leave-item"><div class="mk">＋</div><p>Certificate</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 12. FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="eyebrow-dot"><span class="dot"></span><span class="label">Questions</span></div>
+    <h2 class="sec-h">FAQ</h2>
+
+    <div style="margin-top:32px;">
+      <details class="faq">
+        <summary>Do I need prior rendering experience? <span class="plus">＋</span></summary>
+        <div class="faq-body">No. Foundation level starts from the basics of the visualization pipeline. If you already have experience, you can place directly into Professional or Advanced after a short skills check.</div>
+      </details>
+      <details class="faq">
+        <summary>What software do I need to have installed? <span class="plus">＋</span></summary>
+        <div class="faq-body">You'll need SketchUp or Revit for modeling and D5 Render for visualization. Photoshop is used for post-production. Setup guidance is provided before the programme starts.</div>
+      </details>
+      <details class="faq">
+        <summary>How much time does this require each week? <span class="plus">＋</span></summary>
+        <div class="faq-body">Expect one live session plus 4–6 hours of assignment work per week, more during the final project weeks.</div>
+      </details>
+      <details class="faq">
+        <summary>Is this fully live or self-paced? <span class="plus">＋</span></summary>
+        <div class="faq-body">Sessions are live and cohort-based, with recordings available afterward for review. This isn't a pre-recorded course.</div>
+      </details>
+      <details class="faq">
+        <summary>Will I get a certificate?<span class="plus">＋</span></summary>
+        <div class="faq-body">Yes, on completing the final project and mentor critique you receive a certificate of completion from Architects Stories.</div>
+      </details>
+      <details class="faq">
+        <summary>Can I join with only Foundation-level goals? <span class="plus">＋</span></summary>
+        <div class="faq-body">Yes, you can enroll for Foundation alone, or the full three-level path. Each level is assessed separately.</div>
+      </details>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- 13. FINAL CTA -->
+<section id="final-cta" class="ph ph-cta">
+  <div class="cta-inner">
+    <h2>Build your first visual story<span class="red">.</span></h2>
+    <p>Applications for the next ARCHVIZ batch are open. Seats are limited to keep mentor feedback meaningful.</p>
+    <a class="cta-btn" href="#apply-form" data-open-application>Apply for ARCHVIZ →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-bottom">
+    <div class="foot-logo"><img class="foot-logo-img" src="as-logo.png" alt="Architects Stories"></div>
+    <div class="foot-copy">© 2026 Architects Stories. All rights reserved.</div>
+    <div class="foot-links">
+      <a href="index.html">About</a>
+      <a href="index.html">Contact</a>
+      <a href="index.html">Advertise</a>
+      <a href="index.html">Privacy</a>
+      <a href="index.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<div class="modal" id="apply-form" role="dialog" aria-modal="true" aria-labelledby="application-title" aria-hidden="true">
+  <div class="modal-card">
+    <button class="modal-close" type="button" aria-label="Close application form">×</button>
+    <h2 id="application-title">Apply for ARCHVIZ<span class="red">.</span></h2>
+    <p>Share your details and we’ll contact you with the next batch dates and enrolment information.</p>
+    <form class="apply-form" id="archviz-application">
+      <label class="full">Full name<input name="name" type="text" autocomplete="name" required></label>
+      <label>Email address<input name="email" type="email" autocomplete="email" required></label>
+      <label>Phone number<input name="phone" type="tel" autocomplete="tel" required></label>
+      <label>Course level<select name="course-level" required><option value="" selected disabled>Select a course</option><option>Foundation</option><option>Professional</option><option>Advanced</option></select></label>
+      <label>City<input name="city" type="text" autocomplete="address-level2"></label>
+      <label class="full">Experience level<select name="level" required><option value="" selected disabled>Select a level</option><option>Student / beginner</option><option>Young architect / designer</option><option>3D artist / visualizer</option><option>Working professional</option></select></label>
+      <label class="full">What would you like to learn? <textarea name="message" placeholder="Optional"></textarea></label>
+      <button class="cta-btn" type="submit">Submit application →</button>
+    </form>
+    <div class="form-success" role="status">Thank you — your application has been recorded. We’ll be in touch soon.</div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('apply-form');
+  const openApplications = document.querySelectorAll('[data-open-application]');
+  const closeApplication = modal.querySelector('.modal-close');
+  const form = document.getElementById('archviz-application');
+  const success = modal.querySelector('.form-success');
+  function openModal(){ modal.classList.add('is-open'); modal.setAttribute('aria-hidden','false'); modal.querySelector('input').focus(); }
+  function closeModal(){ modal.classList.remove('is-open'); modal.setAttribute('aria-hidden','true'); }
+  openApplications.forEach(function(button){ button.addEventListener('click', function(event){ event.preventDefault(); openModal(); }); });
+  closeApplication.addEventListener('click', closeModal);
+  modal.addEventListener('click', function(event){ if(event.target === modal) closeModal(); });
+  document.addEventListener('keydown', function(event){ if(event.key === 'Escape') closeModal(); });
+  form.addEventListener('submit', function(event){ event.preventDefault(); form.style.display='none'; success.classList.add('show'); });
+</script>
+
+</body>
+</html>
